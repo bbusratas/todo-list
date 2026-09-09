@@ -307,4 +307,184 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // [BAŞLANGIÇ] Sayfa ilk açıldığında veya yenilendiğinde (F5) verileri ekrana yükle
     renderTasks();
+
+    /* ==========================================================
+       POMODORO ODAK SAYACI MANTIĞI (25 DAKİKA, SES & MODAL)
+       ========================================================== */
+    const pomoTimerDisplay = document.getElementById('pomo-timer-display');
+    const pomoProgressBar = document.getElementById('pomo-progress-bar');
+    const pomoStatus = document.getElementById('pomo-status');
+    const pomoStartBtn = document.getElementById('pomo-start-btn');
+    const pomoPauseBtn = document.getElementById('pomo-pause-btn');
+    const pomoResetBtn = document.getElementById('pomo-reset-btn');
+    const presetChips = document.querySelectorAll('.preset-chip');
+    const pomoModalOverlay = document.getElementById('pomo-modal-overlay');
+    const pomoModalClose = document.getElementById('pomo-modal-close');
+
+    let pomoMinutes = 25;
+    let pomoTotalSeconds = pomoMinutes * 60;
+    let pomoRemainingSeconds = pomoTotalSeconds;
+    let pomoInterval = null;
+    let pomoIsRunning = false;
+
+    // Süreyi mm:ss biçiminde formatlama
+    function formatTime(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+
+    // Durum etiketini güncelleme
+    function setPomoStatus(text, className) {
+        if (!pomoStatus) return;
+        pomoStatus.textContent = text;
+        pomoStatus.className = `pomo-status ${className}`;
+    }
+
+    // Web Audio API ile çan / melodi ses efekti çalma
+    function playChimeSound() {
+        try {
+            const AudioCtx = window.AudioContext || window.webkitAudioContext;
+            if (!AudioCtx) return;
+            const ctx = new AudioCtx();
+
+            // 4 notalı tatlı akor (C5, E5, G5, C6)
+            const notes = [523.25, 659.25, 783.99, 1046.50];
+            notes.forEach((freq, idx) => {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+
+                const startTime = ctx.currentTime + (idx * 0.16);
+                const endTime = startTime + 0.85;
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, startTime);
+
+                // Yumuşak ses yükselmesi ve sönümlenmesi
+                gain.gain.setValueAtTime(0, startTime);
+                gain.gain.linearRampToValueAtTime(0.25, startTime + 0.04);
+                gain.gain.exponentialRampToValueAtTime(0.001, endTime);
+
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                osc.start(startTime);
+                osc.stop(endTime);
+            });
+        } catch (err) {
+            console.warn('AudioContext ses çalma uyarısı:', err);
+        }
+    }
+
+    // Şık modalı açma
+    function openPomoModal() {
+        if (!pomoModalOverlay) return;
+        const descEl = pomoModalOverlay.querySelector('.pomo-modal-text');
+        if (descEl) {
+            descEl.textContent = `Tebrikler! ${pomoMinutes} dakikalık odaklanma seansını başarıyla tamamladınız. Şimdi zihninizi dinlendirmek için kısa bir mola verin.`;
+        }
+        pomoModalOverlay.classList.remove('hidden');
+    }
+
+    // Modalı kapatma
+    function closePomoModal() {
+        if (!pomoModalOverlay) return;
+        pomoModalOverlay.classList.add('hidden');
+    }
+
+    // Zamanlayıcıyı başlatma
+    function startPomodoro() {
+        if (pomoIsRunning) return;
+
+        pomoIsRunning = true;
+        pomoStartBtn.disabled = true;
+        pomoPauseBtn.disabled = false;
+        setPomoStatus('ÇALIŞIYOR', 'pomo-status-running');
+
+        pomoInterval = setInterval(() => {
+            pomoRemainingSeconds--;
+
+            if (pomoRemainingSeconds <= 0) {
+                clearInterval(pomoInterval);
+                pomoRemainingSeconds = 0;
+                pomoIsRunning = false;
+                pomoStartBtn.disabled = false;
+                pomoPauseBtn.disabled = true;
+
+                pomoTimerDisplay.textContent = '00:00';
+                pomoProgressBar.style.width = '100%';
+                setPomoStatus('TAMAMLANDI', 'pomo-status-done');
+                document.title = '🎉 Süre Doldu! - Kodlama Ajandam';
+
+                // Ses efekti ve şık modal uyarısı
+                playChimeSound();
+                openPomoModal();
+            } else {
+                pomoTimerDisplay.textContent = formatTime(pomoRemainingSeconds);
+                const progressPercent = ((pomoTotalSeconds - pomoRemainingSeconds) / pomoTotalSeconds) * 100;
+                pomoProgressBar.style.width = `${progressPercent}%`;
+                document.title = `(${formatTime(pomoRemainingSeconds)}) Kodlama Ajandam`;
+            }
+        }, 1000);
+    }
+
+    // Zamanlayıcıyı durdurma
+    function pausePomodoro() {
+        if (!pomoIsRunning) return;
+
+        clearInterval(pomoInterval);
+        pomoIsRunning = false;
+        pomoStartBtn.disabled = false;
+        pomoPauseBtn.disabled = true;
+        setPomoStatus('DURAKLATILDI', 'pomo-status-paused');
+        document.title = 'Kodlama Ajandam';
+    }
+
+    // Zamanlayıcıyı sıfırlama
+    function resetPomodoro() {
+        clearInterval(pomoInterval);
+        pomoIsRunning = false;
+        pomoRemainingSeconds = pomoTotalSeconds;
+
+        pomoTimerDisplay.textContent = formatTime(pomoRemainingSeconds);
+        pomoProgressBar.style.width = '0%';
+        pomoStartBtn.disabled = false;
+        pomoPauseBtn.disabled = true;
+        setPomoStatus('HAZIR', 'pomo-status-ready');
+        document.title = 'Kodlama Ajandam';
+    }
+
+    // Olay Dinleyicileri
+    if (pomoStartBtn) pomoStartBtn.addEventListener('click', startPomodoro);
+    if (pomoPauseBtn) pomoPauseBtn.addEventListener('click', pausePomodoro);
+    if (pomoResetBtn) pomoResetBtn.addEventListener('click', resetPomodoro);
+
+    // Süre Ön Ayar Çipleri (25 dk, 15 dk, 5 dk)
+    presetChips.forEach((chip) => {
+        chip.addEventListener('click', () => {
+            presetChips.forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+
+            const mins = parseInt(chip.dataset.minutes, 10);
+            pomoMinutes = mins;
+            pomoTotalSeconds = mins * 60;
+            resetPomodoro();
+        });
+    });
+
+    // Modal Kapatma Olayları
+    if (pomoModalClose) pomoModalClose.addEventListener('click', closePomoModal);
+    if (pomoModalOverlay) {
+        pomoModalOverlay.addEventListener('click', (e) => {
+            if (e.target === pomoModalOverlay) {
+                closePomoModal();
+            }
+        });
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && pomoModalOverlay && !pomoModalOverlay.classList.contains('hidden')) {
+            closePomoModal();
+        }
+    });
 });

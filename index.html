@@ -18,8 +18,9 @@
     <!-- Arka plan teknik ızgara deseni -->
     <div class="tech-grid-bg"></div>
 
-    <!-- Ana Mekanik Kart Konteyneri -->
-    <div class="industrial-frame">
+    <div class="app-layout">
+        <!-- Ana Mekanik Kart Konteyneri -->
+        <div class="industrial-frame">
         <!-- Köşe teknik işaretçileri -->
         <div class="corner corner-tl"></div>
         <div class="corner corner-tr"></div>
@@ -97,7 +98,50 @@
         </section>
     </div>
 
+        <!-- Pomodoro Odak Sayacı Kartı -->
+        <aside class="pomodoro-card" id="pomodoro-card" aria-label="Pomodoro Zamanlayıcı">
+            <div class="pomodoro-header">
+                <div class="pomodoro-badge">
+                    <span class="pomodoro-icon">⏱️</span>
+                    <span class="pomodoro-label">ODAK SAYACI</span>
+                </div>
+                <span id="pomo-status" class="pomo-status pomo-status-ready">HAZIR</span>
+            </div>
+
+            <!-- Süre Göstergesi (25:00) -->
+            <div class="pomodoro-timer-box">
+                <div id="pomo-timer-display" class="pomodoro-time">25:00</div>
+                <div class="pomodoro-progress-track">
+                    <div id="pomo-progress-bar" class="pomodoro-progress-fill"></div>
+                </div>
+            </div>
+
+            <!-- Çalışma Süresi Ön Ayarları (25 dk varsayılan) -->
+            <div class="pomodoro-presets">
+                <button type="button" class="preset-chip active" data-minutes="25">25 dk</button>
+                <button type="button" class="preset-chip" data-minutes="15">15 dk</button>
+                <button type="button" class="preset-chip" data-minutes="5">5 dk</button>
+            </div>
+
+            <!-- Kontrol Butonları -->
+            <div class="pomodoro-controls">
+                <button type="button" id="pomo-start-btn" class="pomo-ctrl-btn pomo-start-btn">Başlat</button>
+                <button type="button" id="pomo-pause-btn" class="pomo-ctrl-btn pomo-pause-btn" disabled>Durdur</button>
+                <button type="button" id="pomo-reset-btn" class="pomo-ctrl-btn pomo-reset-btn">Sıfırla</button>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Şık 'Süre Doldu!' Uyarı Modalı -->
+    <div id="pomo-modal-overlay" class="pomo-modal-overlay hidden" role="dialog" aria-modal="true">
+        <div class="pomo-modal-content">
+            <div class="pomo-modal-icon">🎉</div>
+            <h3 class="pomo-modal-title">Süre Doldu!</h3>
+            <p class="pomo-modal-text">Tebrikler! 25 dakikalık odaklanma seansını başarıyla tamamladınız. Şimdi zihninizi dinlendirmek için kısa bir mola verin.</p>
+            <button type="button" id="pomo-modal-close" class="pomo-modal-btn">Tamam</button>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
-
 </html>
