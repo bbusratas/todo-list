@@ -41,16 +41,23 @@
         </header>
 
         <!-- Giriş ve Buton Bölümü -->
-        <section class="input-section">
-            <div class="input-group">
-                <span class="input-bracket">&gt;</span>
-                <input type="text" id="task-input" placeholder="Yeni bir görev veya kodlama maddesi yazın..."
-                    autocomplete="off" spellcheck="false">
+        <section class="input-container">
+            <div class="input-section">
+                <div class="input-group" id="input-group">
+                    <span class="input-bracket">&gt;</span>
+                    <input type="text" id="task-input" placeholder="Yeni bir görev veya kodlama maddesi yazın..."
+                        autocomplete="off" spellcheck="false">
+                </div>
+                <button id="add-btn" class="industrial-btn" type="button">
+                    <span class="btn-glare"></span>
+                    <span class="btn-text">EKLE</span>
+                </button>
             </div>
-            <button id="add-btn" class="industrial-btn" type="button">
-                <span class="btn-glare"></span>
-                <span class="btn-text">EKLE</span>
-            </button>
+            <!-- Şık Hata/Uyarı Mesajı -->
+            <div id="error-toast" class="error-toast">
+                <span class="error-toast-icon">⚠️</span>
+                <span class="error-toast-text">Lütfen geçerli bir görev yazın (boş bırakılamaz)!</span>
+            </div>
         </section>
 
         <!-- Maddelerin Listeleneceği Alan -->

@@ -193,19 +193,63 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // [İŞLEM 4] YENİ GÖREV EKLEME -> localStorage'a kaydeder
+    const inputGroup = document.getElementById('input-group');
+    const errorToast = document.getElementById('error-toast');
+    let errorTimer = null;
+
+    // Şık Hata/Uyarı Bildirimi Gösterme
+    function showError(message) {
+        if (!errorToast) return;
+
+        const textEl = errorToast.querySelector('.error-toast-text');
+        if (textEl && message) {
+            textEl.textContent = message;
+        }
+
+        errorToast.classList.add('show');
+
+        if (inputGroup) {
+            inputGroup.classList.remove('has-error');
+            void inputGroup.offsetWidth; // Animasyonun yeniden tetiklenmesi için reflow
+            inputGroup.classList.add('has-error');
+        }
+
+        taskInput.focus();
+
+        if (errorTimer) clearTimeout(errorTimer);
+        errorTimer = setTimeout(() => {
+            hideError();
+        }, 3500);
+    }
+
+    // Uyarıyı Gizleme
+    function hideError() {
+        if (errorToast) {
+            errorToast.classList.remove('show');
+        }
+        if (inputGroup) {
+            inputGroup.classList.remove('has-error');
+        }
+    }
+
+    // Kullanıcı yazmaya başladığında uyarıyı otomatik gizle
+    taskInput.addEventListener('input', () => {
+        if (taskInput.value.trim().length > 0) {
+            hideError();
+        }
+    });
+
+    // [İŞLEM 4] YENİ GÖREV EKLEME -> Boşluk kontrolü ve şık uyarı
     function addTask() {
         const text = taskInput.value.trim();
 
+        // Hiçbir şey yazılmamışsa veya sadece boşluk bırakılmışsa
         if (!text) {
-            taskInput.focus();
-            // Görsel uyarı efekti
-            taskInput.parentElement.style.borderColor = 'var(--neon-crimson)';
-            setTimeout(() => {
-                taskInput.parentElement.style.borderColor = '';
-            }, 600);
+            showError('Lütfen geçerli bir görev yazın (boş bırakılamaz)!');
             return;
         }
+
+        hideError();
 
         tasks.push({
             id: Date.now(),

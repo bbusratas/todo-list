@@ -293,6 +293,59 @@ body {
     box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
 }
 
+/* Şık Hata / Uyarı Bildirimi (Pastel ve Yumuşak) */
+.input-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.error-toast {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    background: var(--pastel-rose-light);
+    border: 1.5px solid var(--pastel-rose-border);
+    color: var(--pastel-rose-hover);
+    font-family: var(--font-heading);
+    font-size: 0.84rem;
+    font-weight: 700;
+    padding: 9px 18px;
+    border-radius: 20px;
+    margin-top: -14px;
+    margin-bottom: 22px;
+    box-shadow: 0 4px 16px rgba(244, 63, 94, 0.12);
+    align-self: flex-start;
+}
+
+.error-toast.show {
+    display: inline-flex;
+    animation: slide-toast 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes slide-toast {
+    0% {
+        opacity: 0;
+        transform: translateY(-8px) scale(0.96);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Hata durumunda giriş alanının hafifçe sallanması ve pembe parlaması */
+@keyframes soft-shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-6px); }
+    40%, 80% { transform: translateX(6px); }
+}
+
+.input-group.has-error {
+    border-color: var(--pastel-rose) !important;
+    box-shadow: 0 0 0 4px rgba(244, 63, 94, 0.18), var(--shadow-soft) !important;
+    animation: soft-shake 0.4s ease-in-out !important;
+}
+
 /* ==========================================================
    LİSTE ARAÇ ÇUBUĞU (TOOLBAR)
    ========================================================== */
