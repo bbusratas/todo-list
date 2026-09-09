@@ -44,19 +44,35 @@ document.addEventListener('DOMContentLoaded', () => {
         renderTasks();
     }
 
+    const bottomTaskCounter = document.getElementById('bottom-task-counter');
+
+    // Sayaçları (üst ve alt) güncelleyen fonksiyon
+    function updateCounters() {
+        if (counterDisplay) {
+            counterDisplay.textContent = `[ ${tasks.length} ${tasks.length === 1 ? 'MADDE' : 'MADDELER'} ]`;
+        }
+        if (bottomTaskCounter) {
+            const badge = bottomTaskCounter.querySelector('.counter-badge');
+            if (badge) {
+                badge.textContent = tasks.length;
+            } else {
+                bottomTaskCounter.textContent = `Toplam: ${tasks.length} görev`;
+            }
+        }
+    }
+
     // Görev listesini DOM'a çizme
     function renderTasks() {
         taskList.innerHTML = '';
+        updateCounters();
 
         if (tasks.length === 0) {
             emptyState.classList.remove('hidden');
-            counterDisplay.textContent = '[ 0 MADDELER ]';
             if (clearAllBtn) clearAllBtn.disabled = true;
             return;
         }
 
         emptyState.classList.add('hidden');
-        counterDisplay.textContent = `[ ${tasks.length} ${tasks.length === 1 ? 'MADDE' : 'MADDELER'} ]`;
         if (clearAllBtn) clearAllBtn.disabled = false;
 
         tasks.forEach((task, index) => {
@@ -272,11 +288,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Olay Dinleyicileri
+    // Olay Dinleyicileri (Ekle butonu ve Enter tuşu)
     addBtn.addEventListener('click', addTask);
 
     taskInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
+            e.preventDefault();
             addTask();
         }
     });
