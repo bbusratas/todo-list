@@ -56,8 +56,16 @@
         <!-- Maddelerin Listeleneceği Alan -->
         <section class="list-section">
             <div class="list-toolbar">
-                <span class="toolbar-label">KAYITLI MADDELER</span>
-                <span id="counter-display" class="toolbar-counter">[ 0 MADDELER ]</span>
+                <div class="toolbar-left">
+                    <span class="toolbar-label">KAYITLI MADDELER</span>
+                    <span id="counter-display" class="toolbar-counter">[ 0 MADDELER ]</span>
+                </div>
+                <button id="clear-all-btn" class="clear-all-btn" type="button" aria-label="Tüm görevleri sil">
+                    <span class="clear-all-bracket">[</span>
+                    <span class="clear-all-icon">⚠</span>
+                    <span class="clear-all-text">TÜMÜNÜ SİL</span>
+                    <span class="clear-all-bracket">]</span>
+                </button>
             </div>
 
             <ul id="task-list" class="task-list">

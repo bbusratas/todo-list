@@ -326,11 +326,18 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 8px 12px;
+    padding: 10px 14px;
     background: rgba(255, 255, 255, 0.02);
     border-top: 1px solid var(--border-subtle);
     border-bottom: 1px solid var(--border-subtle);
-    margin-bottom: 14px;
+    margin-bottom: 16px;
+    gap: 12px;
+}
+
+.toolbar-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
 .toolbar-label {
@@ -346,6 +353,69 @@ body {
     color: var(--neon-amber);
     font-weight: 600;
     letter-spacing: 1px;
+}
+
+/* Dikkat Çekici Kalın Çerçeveli 'Tümünü Sil' Butonu */
+.clear-all-btn {
+    position: relative;
+    background: rgba(255, 51, 85, 0.12);
+    /* Kalın ve dikkat çekici çift katmanlı çerçeve */
+    border: 3px solid var(--neon-crimson);
+    outline: 2px solid rgba(255, 51, 85, 0.4);
+    outline-offset: 3px;
+    color: var(--neon-crimson);
+    font-family: var(--font-display);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 6px 14px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    white-space: nowrap;
+    box-shadow: 
+        0 0 14px rgba(255, 51, 85, 0.35),
+        inset 0 0 10px rgba(255, 51, 85, 0.15);
+    user-select: none;
+}
+
+.clear-all-btn:hover {
+    background: var(--neon-crimson);
+    color: #ffffff;
+    border-color: #ffffff;
+    outline-color: var(--neon-crimson);
+    box-shadow: 
+        0 0 25px rgba(255, 51, 85, 0.85),
+        0 0 45px rgba(255, 51, 85, 0.4),
+        inset 0 0 12px rgba(255, 255, 255, 0.3);
+    transform: scale(1.05);
+}
+
+.clear-all-btn:active {
+    transform: scale(0.97);
+    box-shadow: 0 0 10px rgba(255, 51, 85, 0.6);
+}
+
+.clear-all-btn:disabled {
+    opacity: 0.25;
+    cursor: not-allowed;
+    border-color: var(--border-hard);
+    outline-color: transparent;
+    color: var(--text-muted);
+    box-shadow: none;
+    pointer-events: none;
+    transform: none;
+}
+
+.clear-all-icon {
+    font-size: 0.95rem;
+    line-height: 1;
+}
+
+.clear-all-bracket {
+    opacity: 0.7;
 }
 
 /* Görev Listesi */
@@ -623,5 +693,21 @@ body {
     .industrial-btn {
         padding: 12px 0;
         width: 100%;
+    }
+
+    .list-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .toolbar-left {
+        justify-content: space-between;
+    }
+
+    .clear-all-btn {
+        justify-content: center;
+        width: 100%;
+        padding: 8px 14px;
     }
 }

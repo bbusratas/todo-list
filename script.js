@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const taskList = document.getElementById('task-list');
     const counterDisplay = document.getElementById('counter-display');
     const emptyState = document.getElementById('empty-state');
+    const clearAllBtn = document.getElementById('clear-all-btn');
 
     // Yerel hafızadan (localStorage) mevcut görevleri yükleme
     let tasks = JSON.parse(localStorage.getItem('kodlama_ajandam_tasks')) || [];
@@ -26,11 +27,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (tasks.length === 0) {
             emptyState.classList.remove('hidden');
             counterDisplay.textContent = '[ 0 MADDELER ]';
+            if (clearAllBtn) clearAllBtn.disabled = true;
             return;
         }
 
         emptyState.classList.add('hidden');
         counterDisplay.textContent = `[ ${tasks.length} ${tasks.length === 1 ? 'MADDE' : 'MADDELER'} ]`;
+        if (clearAllBtn) clearAllBtn.disabled = false;
 
         tasks.forEach((task, index) => {
             const li = document.createElement('li');
@@ -177,6 +180,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Olay Dinleyicileri
     addBtn.addEventListener('click', addTask);
+
+    if (clearAllBtn) {
+        clearAllBtn.addEventListener('click', () => {
+            if (tasks.length === 0) return;
+            tasks = [];
+            editingTaskId = null;
+            saveAndRender();
+        });
+    }
 
     taskInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
