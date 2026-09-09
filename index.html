@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kodlama Ajandam</title>
+    <!-- Google Fonts: Chakra Petch (Mekanik/Endüstriyel başlıklar) & JetBrains Mono (Teknik gövde) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Arka plan teknik ızgara deseni -->
+    <div class="tech-grid-bg"></div>
+
+    <!-- Ana Mekanik Kart Konteyneri -->
+    <div class="industrial-frame">
+        <!-- Köşe teknik işaretçileri -->
+        <div class="corner corner-tl"></div>
+        <div class="corner corner-tr"></div>
+        <div class="corner corner-bl"></div>
+        <div class="corner corner-br"></div>
+
+        <!-- Başlık Bölümü -->
+        <header class="app-header">
+            <div class="tech-status-bar">
+                <span class="tech-spec">SYS.ID // DEV-TODO</span>
+                <span class="tech-online"><span class="neon-beacon"></span>SİSTEM AKTİF</span>
+            </div>
+            <h1 class="app-title">Kodlama Ajandam</h1>
+            <div class="tech-divider">
+                <span class="divider-line"></span>
+                <span class="divider-node"></span>
+                <span class="divider-line"></span>
+            </div>
+        </header>
+
+        <!-- Giriş ve Buton Bölümü -->
+        <section class="input-section">
+            <div class="input-group">
+                <span class="input-bracket">&gt;</span>
+                <input type="text" id="task-input" placeholder="Yeni bir görev veya kodlama maddesi yazın..."
+                    autocomplete="off" spellcheck="false">
+            </div>
+            <button id="add-btn" class="industrial-btn" type="button">
+                <span class="btn-glare"></span>
+                <span class="btn-text">EKLE</span>
+            </button>
+        </section>
+
+        <!-- Maddelerin Listeleneceği Alan -->
+        <section class="list-section">
+            <div class="list-toolbar">
+                <span class="toolbar-label">KAYITLI MADDELER</span>
+                <span id="counter-display" class="toolbar-counter">[ 0 MADDELER ]</span>
+            </div>
+
+            <ul id="task-list" class="task-list">
+                <!-- JavaScript ile dinamik eklenen maddeler -->
+            </ul>
+
+            <!-- Boş Liste Durumu -->
+            <div id="empty-state" class="empty-state">
+                <div class="empty-icon-box">[ / / ]</div>
+                <p class="empty-message">Henüz eklenmiş bir madde bulunmuyor.</p>
+                <span class="empty-hint">Yukarıdaki alana yazıp 'EKLE' butonuna basın.</span>
+            </div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
