@@ -1,5 +1,6 @@
 /**
  * Kodlama Ajandam - Mekanik / Endüstriyel Yapılacaklar Listesi Mantığı
+ * localStorage Entegrasyonu ile Kalıcı Veri Saklama
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -10,13 +11,36 @@ document.addEventListener('DOMContentLoaded', () => {
     const emptyState = document.getElementById('empty-state');
     const clearAllBtn = document.getElementById('clear-all-btn');
 
-    // Yerel hafızadan (localStorage) mevcut görevleri yükleme
-    let tasks = JSON.parse(localStorage.getItem('kodlama_ajandam_tasks')) || [];
-    let editingTaskId = null; // Düzenleme modundaki görevin ID'si
+    // localStorage Anahtarı
+    const STORAGE_KEY = 'kodlama_ajandam_tasks';
 
-    // Görevleri kaydetme ve arayüzü güncelleme fonksiyonu
+    // 1. HAFIZADAN YÜKLEME: Sayfa açıldığında veya yenilendiğinde (F5) verileri geri yükler
+    function loadTasks() {
+        try {
+            const savedData = localStorage.getItem(STORAGE_KEY);
+            return savedData ? JSON.parse(savedData) : [];
+        } catch (error) {
+            console.error('Veri yükleme hatası:', error);
+            return [];
+        }
+    }
+
+    // 2. HAFIZAYA KAYDETME: Değişiklikleri localStorage üzerine yazar
+    function saveTasks(tasksToSave) {
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(tasksToSave));
+        } catch (error) {
+            console.error('Veri kaydetme hatası:', error);
+        }
+    }
+
+    // Uygulama Durumu
+    let tasks = loadTasks();
+    let editingTaskId = null; // Aktif düzenlenen görevin ID'si
+
+    // Değişiklikleri kaydedip arayüzü güncelleyen ana fonksiyon
     function saveAndRender() {
-        localStorage.setItem('kodlama_ajandam_tasks', JSON.stringify(tasks));
+        saveTasks(tasks);
         renderTasks();
     }
 
@@ -40,12 +64,12 @@ document.addEventListener('DOMContentLoaded', () => {
             li.className = `task-item ${task.completed ? 'completed' : ''}`;
             li.setAttribute('data-id', task.id);
 
-            // Sıra numarası (örn: 01, 02...)
+            // Sıra numarası (örn: [01], [02]...)
             const indexStr = String(index + 1).padStart(2, '0');
             const isEditing = (task.id === editingTaskId);
 
             if (isEditing) {
-                // Düzenleme Modu
+                // Düzenleme Modu (Metin Değiştirme)
                 li.innerHTML = `
                     <div class="task-left">
                         <input 
@@ -88,14 +112,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
             }
 
-            // Onay Kutusu (Checkbox) Değişimi
+            // [İŞLEM 1] TAMAMLANDI OLARAK İŞARETLEME -> localStorage'a kaydeder
             const checkbox = li.querySelector('.task-checkbox');
             checkbox.addEventListener('change', () => {
                 task.completed = checkbox.checked;
                 saveAndRender();
             });
 
-            // Düzenle / Kaydet Butonu
+            // [İŞLEM 2] DÜZENLEME & KAYDETME -> localStorage'a kaydeder
             const editBtn = li.querySelector('.task-edit-btn');
             editBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -108,6 +132,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     editingTaskId = null;
                     saveAndRender();
                 } else {
+                    // Varsa önceki düzenlemeyi kaydet
+                    commitActiveEdit();
                     editingTaskId = task.id;
                     renderTasks();
                     const currentInput = taskList.querySelector(`.task-item[data-id="${task.id}"] .task-edit-input`);
@@ -118,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            // Düzenleme kutusunda Enter ve Escape tuşları
+            // Düzenleme kutusunda Enter (Kaydet) ve Escape (İptal)
             if (isEditing) {
                 const editInput = li.querySelector('.task-edit-input');
                 editInput.addEventListener('keydown', (e) => {
@@ -138,7 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             }
 
-            // Silme işlemi
+            // [İŞLEM 3] TEKİL SİLME -> localStorage'a kaydeder
             const deleteBtn = li.querySelector('.task-delete-btn');
             deleteBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -153,7 +179,21 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Yeni görev ekleme
+    // Açık olan düzenlemeyi kaydetme yardımcısı
+    function commitActiveEdit() {
+        if (editingTaskId === null) return;
+        const activeInput = taskList.querySelector(`.task-item[data-id="${editingTaskId}"] .task-edit-input`);
+        if (activeInput) {
+            const val = activeInput.value.trim();
+            const task = tasks.find(t => t.id === editingTaskId);
+            if (task && val) {
+                task.text = val;
+                saveTasks(tasks);
+            }
+        }
+    }
+
+    // [İŞLEM 4] YENİ GÖREV EKLEME -> localStorage'a kaydeder
     function addTask() {
         const text = taskInput.value.trim();
 
@@ -178,9 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
         saveAndRender();
     }
 
-    // Olay Dinleyicileri
-    addBtn.addEventListener('click', addTask);
-
+    // [İŞLEM 5] TÜMÜNÜ SİLME -> localStorage'dan da tamamen temizler
     if (clearAllBtn) {
         clearAllBtn.addEventListener('click', () => {
             if (tasks.length === 0) return;
@@ -189,6 +227,9 @@ document.addEventListener('DOMContentLoaded', () => {
             saveAndRender();
         });
     }
+
+    // Olay Dinleyicileri
+    addBtn.addEventListener('click', addTask);
 
     taskInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
@@ -203,6 +244,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return div.innerHTML;
     }
 
-    // İlk yükleme
+    // [BAŞLANGIÇ] Sayfa ilk açıldığında veya yenilendiğinde (F5) verileri ekrana yükle
     renderTasks();
 });
