@@ -37,6 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Uygulama Durumu
     let tasks = loadTasks();
     let editingTaskId = null; // Aktif düzenlenen görevin ID'si
+    let currentFilter = 'all'; // 'all' | 'active' | 'completed'
 
     // Değişiklikleri kaydedip arayüzü güncelleyen ana fonksiyon
     function saveAndRender() {
@@ -45,6 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const bottomTaskCounter = document.getElementById('bottom-task-counter');
+    const filterButtons = document.querySelectorAll('.filter-btn');
 
     // Sayaçları (üst ve alt) güncelleyen fonksiyon
     function updateCounters() {
@@ -61,21 +63,54 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Aktif filtreye göre görevleri getirme
+    function getFilteredTasks() {
+        if (currentFilter === 'active') {
+            return tasks.filter(t => !t.completed);
+        } else if (currentFilter === 'completed') {
+            return tasks.filter(t => t.completed);
+        }
+        return tasks;
+    }
+
     // Görev listesini DOM'a çizme
     function renderTasks() {
         taskList.innerHTML = '';
         updateCounters();
 
+        const emptyMessageEl = emptyState ? emptyState.querySelector('.empty-message') : null;
+        const emptyHintEl = emptyState ? emptyState.querySelector('.empty-hint') : null;
+
+        // Hiç görev yoksa
         if (tasks.length === 0) {
             emptyState.classList.remove('hidden');
+            if (emptyMessageEl) emptyMessageEl.textContent = 'Henüz eklenmiş bir madde bulunmuyor.';
+            if (emptyHintEl) emptyHintEl.textContent = "Yukarıdaki alana yazıp 'EKLE' butonuna basın.";
             if (clearAllBtn) clearAllBtn.disabled = true;
             return;
         }
 
-        emptyState.classList.add('hidden');
         if (clearAllBtn) clearAllBtn.disabled = false;
 
-        tasks.forEach((task, index) => {
+        // Filtrelenmiş görevler
+        const filteredTasks = getFilteredTasks();
+
+        // Seçili filtrede görev yoksa
+        if (filteredTasks.length === 0) {
+            emptyState.classList.remove('hidden');
+            if (currentFilter === 'active') {
+                if (emptyMessageEl) emptyMessageEl.textContent = 'Devam eden bir görev bulunmuyor.';
+                if (emptyHintEl) emptyHintEl.textContent = 'Tüm görevlerinizi tamamladınız, tebrikler! 🎉';
+            } else if (currentFilter === 'completed') {
+                if (emptyMessageEl) emptyMessageEl.textContent = 'Henüz tamamlanmış bir görev bulunmuyor.';
+                if (emptyHintEl) emptyHintEl.textContent = 'Bir görevi tamamlamak için solundaki onay kutusunu işaretleyin.';
+            }
+            return;
+        }
+
+        emptyState.classList.add('hidden');
+
+        filteredTasks.forEach((task, index) => {
             const li = document.createElement('li');
             li.className = `task-item ${task.completed ? 'completed' : ''}`;
             li.setAttribute('data-id', task.id);
@@ -287,6 +322,16 @@ document.addEventListener('DOMContentLoaded', () => {
             saveAndRender();
         });
     }
+
+    // [İŞLEM 6] FİLTRE BUTONLARI DİNLEYİCİSİ -> localStorage'ı bozmadan sadece görünümü filtreler
+    filterButtons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+            filterButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentFilter = btn.dataset.filter;
+            renderTasks();
+        });
+    });
 
     // Olay Dinleyicileri (Ekle butonu ve Enter tuşu)
     addBtn.addEventListener('click', addTask);
