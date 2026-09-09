@@ -29,6 +29,9 @@
     --neon-amber-glow: 0 0 10px rgba(255, 183, 0, 0.4);
     --neon-crimson: #ff3355;
     --neon-crimson-glow: 0 0 10px rgba(255, 51, 85, 0.4);
+    --neon-green: #00ff88;
+    --neon-green-dim: rgba(0, 255, 136, 0.15);
+    --neon-green-glow: 0 0 10px rgba(0, 255, 136, 0.45);
 
     /* Font Aileleri */
     --font-display: 'Chakra Petch', sans-serif;
@@ -404,32 +407,42 @@ body {
     min-width: 24px;
 }
 
-/* Mekanik Checkbox Butonu */
-.task-check-btn {
+/* Mekanik Onay Kutusu (Checkbox) */
+.task-checkbox {
+    appearance: none;
+    -webkit-appearance: none;
     width: 18px;
     height: 18px;
     background: var(--bg-input);
     border: 1px solid var(--border-bright);
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.15s ease;
+    display: inline-grid;
+    place-content: center;
     flex-shrink: 0;
-    padding: 0;
     outline: none;
-}
-
-.task-check-btn:hover {
-    border-color: var(--neon-cyan);
-    box-shadow: 0 0 6px rgba(0, 240, 255, 0.4);
-}
-
-.check-indicator {
-    width: 8px;
-    height: 8px;
-    background: transparent;
     transition: all 0.15s ease;
+    margin: 0;
+}
+
+.task-checkbox:hover {
+    border-color: var(--neon-green);
+    box-shadow: 0 0 6px rgba(0, 255, 136, 0.4);
+}
+
+.task-checkbox:checked {
+    background: rgba(0, 255, 136, 0.12);
+    border-color: var(--neon-green);
+    box-shadow: 0 0 8px rgba(0, 255, 136, 0.35);
+}
+
+.task-checkbox:checked::before {
+    content: "✓";
+    font-size: 12px;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    color: var(--neon-green);
+    text-shadow: 0 0 6px var(--neon-green);
+    line-height: 1;
 }
 
 /* Görev Metni */
@@ -441,21 +454,75 @@ body {
     line-height: 1.4;
 }
 
-/* Tamamlanmış Görev Durumu */
+/* Düzenleme Giriş Kutusu */
+.task-edit-input {
+    flex: 1;
+    background: #0a0e13;
+    border: 1px solid var(--neon-green);
+    color: var(--text-main);
+    font-family: var(--font-mono);
+    font-size: 0.92rem;
+    padding: 3px 8px;
+    outline: none;
+    box-shadow: inset 0 0 6px rgba(0, 255, 136, 0.2), var(--neon-green-glow);
+}
+
+/* Tamamlanmış Görev Durumu (Üstü Çizili) */
 .task-item.completed {
     border-left-color: var(--neon-amber);
     background: rgba(18, 22, 28, 0.5);
-    opacity: 0.7;
-}
-
-.task-item.completed .check-indicator {
-    background: var(--neon-amber);
-    box-shadow: 0 0 6px var(--neon-amber);
+    opacity: 0.65;
 }
 
 .task-item.completed .task-text {
     text-decoration: line-through;
+    text-decoration-color: var(--neon-amber);
+    text-decoration-thickness: 1.5px;
     color: var(--text-muted);
+}
+
+/* Görev İşlem Butonları Grubu */
+.task-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 12px;
+    flex-shrink: 0;
+}
+
+/* Yeşil Düzenle Butonu */
+.task-edit-btn {
+    background: rgba(0, 255, 136, 0.08);
+    border: 1px solid var(--neon-green);
+    color: var(--neon-green);
+    font-family: var(--font-display);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 4px 10px;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    white-space: nowrap;
+    box-shadow: inset 0 0 6px rgba(0, 255, 136, 0.1);
+}
+
+.task-edit-btn:hover {
+    background: var(--neon-green);
+    color: #06090e;
+    box-shadow: 0 0 12px rgba(0, 255, 136, 0.6);
+    transform: translateY(-1px);
+}
+
+.task-edit-btn:active {
+    transform: translateY(1px);
+    box-shadow: 0 0 6px rgba(0, 255, 136, 0.4);
+}
+
+.task-edit-btn.is-saving {
+    background: var(--neon-green);
+    color: #06090e;
+    box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
 }
 
 /* Mekanik Silme Butonu */
@@ -468,7 +535,6 @@ body {
     padding: 4px 8px;
     cursor: pointer;
     transition: all 0.2s ease;
-    margin-left: 10px;
     flex-shrink: 0;
     outline: none;
 }
