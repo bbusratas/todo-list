@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <div class="task-actions">
                         <button class="task-edit-btn is-saving" type="button" aria-label="Değişikliği kaydet">KAYDET</button>
-                        <button class="task-delete-btn" type="button" aria-label="Görevi sil">[DEL]</button>
+                        <button class="task-delete-btn" type="button" aria-label="Görevi sil">Sil</button>
                     </div>
                 `;
             } else {
@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <div class="task-actions">
                         <button class="task-edit-btn" type="button" aria-label="Görevi düzenle">Düzenle</button>
-                        <button class="task-delete-btn" type="button" aria-label="Görevi sil">[DEL]</button>
+                        <button class="task-delete-btn" type="button" aria-label="Görevi sil">Sil</button>
                     </div>
                 `;
             }
