@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
+<!-- language is en because the website will be in English -->
 
 <head>
     <meta charset="UTF-8">
@@ -21,89 +22,89 @@
     <div class="app-layout">
         <!-- Ana Mekanik Kart Konteyneri -->
         <div class="industrial-frame">
-        <!-- Köşe teknik işaretçileri -->
-        <div class="corner corner-tl"></div>
-        <div class="corner corner-tr"></div>
-        <div class="corner corner-bl"></div>
-        <div class="corner corner-br"></div>
+            <!-- Köşe teknik işaretçileri -->
+            <div class="corner corner-tl"></div>
+            <div class="corner corner-tr"></div>
+            <div class="corner corner-bl"></div>
+            <div class="corner corner-br"></div>
 
-        <!-- Başlık Bölümü -->
-        <header class="app-header">
-            <div class="tech-status-bar">
-                <span class="tech-spec">SYS.ID // DEV-TODO</span>
-                <span class="tech-online"><span class="neon-beacon"></span>SİSTEM AKTİF</span>
-            </div>
-            <h1 class="app-title">Kodlama Ajandam</h1>
-            <div class="tech-divider">
-                <span class="divider-line"></span>
-                <span class="divider-node"></span>
-                <span class="divider-line"></span>
-            </div>
-        </header>
-
-        <!-- Giriş ve Buton Bölümü -->
-        <section class="input-container">
-            <div class="input-section">
-                <div class="input-group" id="input-group">
-                    <span class="input-bracket">&gt;</span>
-                    <input type="text" id="task-input" placeholder="Yeni bir görev veya kodlama maddesi yazın..."
-                        autocomplete="off" spellcheck="false">
+            <!-- Başlık Bölümü -->
+            <header class="app-header">
+                <div class="tech-status-bar">
+                    <span class="tech-spec">SYS.ID // DEV-TODO</span>
+                    <span class="tech-online"><span class="neon-beacon"></span>SİSTEM AKTİF</span>
                 </div>
-                <button id="add-btn" class="industrial-btn" type="button">
-                    <span class="btn-glare"></span>
-                    <span class="btn-text">EKLE</span>
-                </button>
-            </div>
-            <!-- Şık Hata/Uyarı Mesajı -->
-            <div id="error-toast" class="error-toast">
-                <span class="error-toast-icon">⚠️</span>
-                <span class="error-toast-text">Lütfen geçerli bir görev yazın (boş bırakılamaz)!</span>
-            </div>
-        </section>
-
-        <!-- Maddelerin Listeleneceği Alan -->
-        <section class="list-section">
-            <div class="list-toolbar">
-                <div class="toolbar-left">
-                    <span class="toolbar-label">KAYITLI MADDELER</span>
-                    <span id="counter-display" class="toolbar-counter">[ 0 MADDELER ]</span>
+                <h1 class="app-title">Kodlama Ajandam</h1>
+                <div class="tech-divider">
+                    <span class="divider-line"></span>
+                    <span class="divider-node"></span>
+                    <span class="divider-line"></span>
                 </div>
-                <button id="clear-all-btn" class="clear-all-btn" type="button" aria-label="Tüm görevleri sil">
-                    <span class="clear-all-bracket">[</span>
-                    <span class="clear-all-icon">⚠</span>
-                    <span class="clear-all-text">TÜMÜNÜ SİL</span>
-                    <span class="clear-all-bracket">]</span>
-                </button>
-            </div>
+            </header>
 
-            <!-- Filtre Butonları (Tümü, Devam Edenler, Tamamlananlar) -->
-            <div class="filter-bar" role="group" aria-label="Görev filtreleri">
-                <button type="button" class="filter-btn active" data-filter="all">Tümü</button>
-                <button type="button" class="filter-btn" data-filter="active">Devam Edenler</button>
-                <button type="button" class="filter-btn" data-filter="completed">Tamamlananlar</button>
-            </div>
-
-            <ul id="task-list" class="task-list">
-                <!-- JavaScript ile dinamik eklenen maddeler -->
-            </ul>
-
-            <!-- Boş Liste Durumu -->
-            <div id="empty-state" class="empty-state">
-                <div class="empty-icon-box">[ / / ]</div>
-                <p class="empty-message">Henüz eklenmiş bir madde bulunmuyor.</p>
-                <span class="empty-hint">Yukarıdaki alana yazıp 'EKLE' butonuna basın.</span>
-            </div>
-
-            <!-- Listenin Altındaki Toplam Görev Sayacı -->
-            <div class="list-bottom-bar">
-                <div id="bottom-task-counter" class="bottom-task-counter">
-                    <span class="counter-label">Toplam:</span>
-                    <span class="counter-badge">0</span>
-                    <span class="counter-unit">görev</span>
+            <!-- Giriş ve Buton Bölümü -->
+            <section class="input-container">
+                <div class="input-section">
+                    <div class="input-group" id="input-group">
+                        <span class="input-bracket">&gt;</span>
+                        <input type="text" id="task-input" placeholder="Yeni bir görev veya kodlama maddesi yazın..."
+                            autocomplete="off" spellcheck="false">
+                    </div>
+                    <button id="add-btn" class="industrial-btn" type="button">
+                        <span class="btn-glare"></span>
+                        <span class="btn-text">EKLE</span>
+                    </button>
                 </div>
-            </div>
-        </section>
-    </div>
+                <!-- Şık Hata/Uyarı Mesajı -->
+                <div id="error-toast" class="error-toast">
+                    <span class="error-toast-icon">⚠️</span>
+                    <span class="error-toast-text">Lütfen geçerli bir görev yazın (boş bırakılamaz)!</span>
+                </div>
+            </section>
+
+            <!-- Maddelerin Listeleneceği Alan -->
+            <section class="list-section">
+                <div class="list-toolbar">
+                    <div class="toolbar-left">
+                        <span class="toolbar-label">KAYITLI MADDELER</span>
+                        <span id="counter-display" class="toolbar-counter">[ 0 MADDELER ]</span>
+                    </div>
+                    <button id="clear-all-btn" class="clear-all-btn" type="button" aria-label="Tüm görevleri sil">
+                        <span class="clear-all-bracket">[</span>
+                        <span class="clear-all-icon">⚠</span>
+                        <span class="clear-all-text">TÜMÜNÜ SİL</span>
+                        <span class="clear-all-bracket">]</span>
+                    </button>
+                </div>
+
+                <!-- Filtre Butonları (Tümü, Devam Edenler, Tamamlananlar) -->
+                <div class="filter-bar" role="group" aria-label="Görev filtreleri">
+                    <button type="button" class="filter-btn active" data-filter="all">Tümü</button>
+                    <button type="button" class="filter-btn" data-filter="active">Devam Edenler</button>
+                    <button type="button" class="filter-btn" data-filter="completed">Tamamlananlar</button>
+                </div>
+
+                <ul id="task-list" class="task-list">
+                    <!-- JavaScript ile dinamik eklenen maddeler -->
+                </ul>
+
+                <!-- Boş Liste Durumu -->
+                <div id="empty-state" class="empty-state">
+                    <div class="empty-icon-box">[ / / ]</div>
+                    <p class="empty-message">Henüz eklenmiş bir madde bulunmuyor.</p>
+                    <span class="empty-hint">Yukarıdaki alana yazıp 'EKLE' butonuna basın.</span>
+                </div>
+
+                <!-- Listenin Altındaki Toplam Görev Sayacı -->
+                <div class="list-bottom-bar">
+                    <div id="bottom-task-counter" class="bottom-task-counter">
+                        <span class="counter-label">Toplam:</span>
+                        <span class="counter-badge">0</span>
+                        <span class="counter-unit">görev</span>
+                    </div>
+                </div>
+            </section>
+        </div>
 
         <!-- Pomodoro Odak Sayacı Kartı -->
         <aside class="pomodoro-card" id="pomodoro-card" aria-label="Pomodoro Zamanlayıcı">
@@ -144,11 +145,13 @@
         <div class="pomo-modal-content">
             <div class="pomo-modal-icon">🎉</div>
             <h3 class="pomo-modal-title">Süre Doldu!</h3>
-            <p class="pomo-modal-text">Tebrikler! 25 dakikalık odaklanma seansını başarıyla tamamladınız. Şimdi zihninizi dinlendirmek için kısa bir mola verin.</p>
+            <p class="pomo-modal-text">Tebrikler! 25 dakikalık odaklanma seansını başarıyla tamamladınız. Şimdi
+                zihninizi dinlendirmek için kısa bir mola verin.</p>
             <button type="button" id="pomo-modal-close" class="pomo-modal-btn">Tamam</button>
         </div>
     </div>
 
     <script src="script.js"></script>
 </body>
+
 </html>
